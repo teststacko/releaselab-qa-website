@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+/* ---------- Theme tokens ----------
+   Dark is the default. Light overrides the same Tailwind colour variables, so existing
+   classes like text-white, text-gray-400, border-white/10 and bg-black switch themes
+   automatically. */
+:root {
+  color-scheme: dark;
+  --page: #000000;
+  --surface: #050505;
+  --fg: #ffffff;
+  --band-from: #081321;
+  --band-to: #0b1c34;
+
+  /* Slightly lighter than Tailwind's gray-500 so small captions pass 4.5:1 on near-black */
+  --color-gray-500: #8b93a1;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #f3f6fb;
+  --surface: #ffffff;
+  --fg: #0f172a;
+  --band-from: #e6efff;
+  --band-to: #d3e3ff;
+
+  --color-black: #f3f6fb;
+  --color-white: #0f172a;
+  --color-gray-200: #1e293b;
+  --color-gray-300: #334155;
+  --color-gray-400: #475569;
+  --color-gray-500: #596a80;
+  --color-gray-600: #94a3b8;
+  --color-blue-300: #1d4ed8;
+  --color-blue-400: #2563eb;
+  --color-blue-500: #2563eb;
+  --color-green-300: #166534;
+  --color-green-400: #15803d;
+  --color-red-400: #b91c1c;
+  --color-amber-300: #b45309;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--page);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-[1850px] px-4 sm:px-6 lg:px-10; }
+  .card { @apply rounded-3xl border border-white/10; background: var(--surface); }
+  .card-hover { @apply transition duration-300 hover:-translate-y-2 hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/10; }
+  .h2 { @apply text-2xl font-bold text-white sm:text-3xl lg:text-4xl; }
+  .lead { @apply text-lg leading-8 text-gray-400; }
+  .input { @apply w-full rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-white outline-none transition placeholder:text-gray-500 focus:border-blue-500; }
+}
+
+/* Gradient panels (CTA, partner band, project tile headers) */
+.band {
+  background-image: linear-gradient(135deg, var(--band-from), var(--band-to));
+}
+
+/* Light theme: soft elevation instead of dark-on-dark contrast */
+:root[data-theme="light"] .card {
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.05);
+}
+
+/* Logo: with no light-theme variant, show it on a dark plate so it stays readable */
+.logo-plate {
+  display: inline-block;
+  line-height: 0;
+  border-radius: 0.75rem;
+}
+:root[data-theme="light"] .logo-plate {
+  background: #0b1220;
+  padding: 0.4rem 0.8rem;
+}
+
+/* While the theme is being switched, skip transitions so nothing fades at a different speed */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+/* Theme-specific image variants (used when a light variant file is provided) */
+.theme-dark-only { display: block; }
+.theme-light-only { display: none; }
+:root[data-theme="light"] .theme-dark-only { display: none; }
+:root[data-theme="light"] .theme-light-only { display: block; }
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
